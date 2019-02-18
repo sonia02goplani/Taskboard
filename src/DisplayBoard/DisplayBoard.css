@@ -1,0 +1,20 @@
+.container{
+    margin: 0;
+    padding: 0;
+}
+.boardMainContent{
+    justify-content: flex-start; /* align items in Main Axis */
+    align-items: stretch; /* align items in Cross Axis */
+    align-content: stretch;
+    margin: 0;  
+}
+.boardCanvas {
+    position: absolute;
+    flex-grow: 1;
+    height: 100%;
+}
+.boardheader{
+position: relative;
+background: rgba(0,0,0,.15);
+padding: 4px;
+}

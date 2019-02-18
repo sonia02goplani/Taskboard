@@ -1,0 +1,42 @@
+.boardheader{
+    position: relative;
+    background: rgba(0,0,0,.15);
+    padding: 4px;
+}
+.card{
+    margin: 5px;
+    padding: 0;
+}
+.cardWrapper{
+    background-color: lightgray;
+    padding:  15px;
+    border: 5px solid white;
+}
+.row{
+    margin: 0
+}
+input{
+    box-sizing: border-box;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 3px;
+    margin-bottom: 5px;
+}
+.TitleTile{
+    background: transparent;
+    border: 1px solid transparent;
+    font-weight: 700;
+    font-size: 20px;
+    color: black
+
+}
+.DescTile{
+    background-color: rgba(9,45,66,.08);
+    border-radius: 3px;
+    color: #6b808c;
+    display: block;
+    padding: 7px 9px;
+    text-decoration: none;
+    min-height: 40px;
+    min-width: 465px;
+}
