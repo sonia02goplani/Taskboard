@@ -3,6 +3,7 @@ import  './DisplayBoard.css';
 import DisplayCards from '../DisplayCards/DisplayCards';
 
 const displayBoard = (props) => (
+
 <div className="container" style={{
         opacity: props.shows ? '1' : '0',
         backgroundColor:props.color 
@@ -18,7 +19,8 @@ const displayBoard = (props) => (
         <h1> {props.title} </h1>
         </div>   
     </div>
-    <DisplayCards />
+
+    <DisplayCards title={props.title}/>
 </div>    
 );
 

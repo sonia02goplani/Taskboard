@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import DisplayBoard from '../DisplayBoard/DisplayBoard';
-
 import './Example.css'
+import fire from '../fire'
+import _ from 'lodash';
 
 class Example extends Component {
     constructor(props, context) {
         super(props, context);
-
+        
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -16,27 +17,69 @@ class Example extends Component {
         this.createBoard=this.createBoard.bind(this);
      
         this.state = {
+            loadBoard:[],
             show: false,
+            showBoard:false,
+           board:{
             boardTitle: '',
             favColor:'#838c91',
-            showBoard:false
+           
+           } ,
+            
         };
     }
+    componentWillMount(){
+        /* Create reference to messages in Firebase Database */
+        let boardRef = fire.database().ref('boards').orderByKey().limitToLast(100);
+        boardRef.on('value', snapshot => {
+          /* Update React state when message is added at Firebase Database */
+         
+          this.setState({loadBoard: _.values(snapshot.val()) }, () => {console.log(this.state.loadBoard)});
+        })
+      }
     handleChange(event){
         const { name, value } = event.target
         this.setState({
-        [name]: value
+        board:{
+            ...this.state.board,
+            [name]: value
+        }
         })
     }
     handleClick =(color) => {
   
         this.setState({
+           board:{
+               ...this.state.board,
             favColor: color
+           } 
         })
         
     }
     createBoard=()=> {
-        this.setState({ show: false ,showBoard:true});
+        this.setState({ 
+            show: false ,
+            showBoard:true,
+            board:{
+            ...this.state.board,
+           
+            }
+           });
+      console.log(this.state.board.showBoard)
+            fire.database().ref('boards').push(this.state.board );                
+    }
+    handleBoardShow=(board) =>{
+        this.setState({
+            showBoard:true,
+            board:{
+                boardTitle: board.boardTitle,
+                favColor: board.favColor
+            }
+        });
+        <DisplayBoard title={this.state.board.boardTitle} shows={this.state.showBoard} color={this.state.board.favColor} />
+
+       
+
     }
 
     handleClose() {
@@ -49,14 +92,24 @@ class Example extends Component {
     }
 
     render() {
-      
+        var boards=[];
+        this.state.loadBoard.forEach( board => {
+
+            boards.push( 
+            <Button className="mr-2" variant="success" onClick={() =>this.handleBoardShow(board)}>
+            {board.boardTitle}
+            </Button>)
+        });
+
 
         return (
             <div >
                  <header>
-                        <Button variant="primary" onClick={this.handleShow}>
-                            New Board
+                        <Button className="mr-2"  variant="primary" onClick={this.handleShow}>
+                        New Board
                         </Button>
+                        {boards}
+                     
                 </header>
                 <div>
                     <Modal  show={this.state.show} onHide={this.handleClose}>
@@ -70,6 +123,7 @@ class Example extends Component {
                                 value={this.state.boardTitle}
                                 name='boardTitle'
                                 onChange={this.handleChange} />
+                                
                               </div>
                            
                         
@@ -165,8 +219,7 @@ class Example extends Component {
                         </Modal.Footer>
                     </Modal>
                 </div>
-                
-                   <DisplayBoard title={this.state.boardTitle} shows={this.state.showBoard} color={this.state.favColor}/>
+                <DisplayBoard title={this.state.board.boardTitle} shows={this.state.showBoard} color={this.state.board.favColor} />
                
             </div>
         );
